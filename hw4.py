@@ -28,7 +28,8 @@ class Customer:
     # Submit_order takes a cashier, a stall and an amount as parameters, 
     # it deducts the amount from the customer’s wallet and calls the receive_payment method on the cashier object
     def submit_order(self, cashier, stall, amount): 
-        pass
+        self.wallet -= amount
+        cashier.receive_payment(stall, amount)
 
     # The __str__ method prints the customer's information.    
     def __str__(self):
@@ -72,7 +73,42 @@ class Cashier:
 ## Complete the Stall class here following the instructions in HW_4_instructions_rubric
 class Stall:
     
-    pass
+    def __init__(self, name, inventory = {}, cost = 7, earnings = 0):
+        self.name = name
+        self.inventory = inventory
+        self.cost = cost
+        self.earnings = earnings
+    
+    def process_order(self, name, quantity):
+        item_quantity = self.inventory[name]
+        if quantity >= item_quantity:
+            self.inventory[name] = self.inventory[name] - quantity
+        else:
+            pass
+    
+    def has_item(self, name, quantity):
+        if name in self.inventory:
+            food_quant = self.inventory[name]
+            if food_quant >= quantity:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def stock_up(self, name, quantity):
+        if name in self.inventory:
+            self.inventory[name] = self.inventory[name] + quantity
+        else:
+            self.inventory[name] = quantity
+    
+    def compute_cost(self, quantity):
+        total = self.cost * quantity
+        return total
+
+    def __str__(self):
+        print("Hello, we are", self.name, ". This is the current menu", self.inventory.keys(), '. We charge $', self.cost, 'per item. We have $', self.earnings, 'in total.')
+    
 
 
 class TestAllMethods(unittest.TestCase):
@@ -147,8 +183,8 @@ class TestAllMethods(unittest.TestCase):
     def test_compute_cost(self):
         #what's wrong with the following statements?
         #can you correct them?
-        self.assertEqual(self.s1.compute_cost(self.s1,5), 51)
-        self.assertEqual(self.s3.compute_cost(self.s3,6), 45)
+        self.assertEqual(self.s1.compute_cost(51), 510)
+        self.assertEqual(self.s3.compute_cost(45), 315)
 
 	# Check that the stall can properly see when it is empty
     def test_has_item(self):
@@ -157,11 +193,11 @@ class TestAllMethods(unittest.TestCase):
         # Test to see if has_item returns True when a stall has enough items left
         # Please follow the instructions below to create three different kinds of test cases 
         # Test case 1: the stall does not have this food item: 
-        
+        self.assertFalse(self.s1.has_item("Oranges", 1))
         # Test case 2: the stall does not have enough food item: 
-        
+        self.assertFalse(self.s1.has_item("Burger", 50))
         # Test case 3: the stall has the food item of the certain quantity: 
-        pass
+        self.assertTrue(self.s1.has_item("Burger", 30))
 
 	# Test validate order
     def test_validate_order(self):
