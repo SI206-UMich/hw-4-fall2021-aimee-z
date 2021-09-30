@@ -85,8 +85,7 @@ class Stall:
         self.earnings = earnings
     
     def process_order(self, name, quantity):
-        item_quantity = self.inventory[name]
-        if quantity >= item_quantity:
+        if self.has_item(name, quantity):
             self.inventory[name] = self.inventory[name] - quantity
         else:
             pass
