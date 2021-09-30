@@ -1,4 +1,9 @@
 
+# Your name: Aimee Zheng
+# Your student id: 92857918
+# Your email: aimeez@umich.edu
+# List who you have worked with on this homework: Sage Pei, Marina Sun
+
 import unittest
 
 # The Customer class
